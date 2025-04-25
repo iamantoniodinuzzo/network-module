@@ -17,7 +17,7 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: 'stable' # Puoi specificare una versione esatta se necessario
+        flutter-version: '3.29.0'
         channel: 'stable'
         cache: true # Abilita la cache per velocizzare i build futuri
 
