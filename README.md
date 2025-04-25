@@ -1,4 +1,5 @@
 # Network Module
+[![codecov](https://codecov.io/gh/iamantoniodinuzzo/network-module/branch/main/graph/badge.svg)](https://codecov.io/gh/iamantoniodinuzzo/network-module)
 
 A robust, reusable, and testable network layer package for Flutter applications, built on top of the powerful `dio` package. It provides a standardized way to handle network requests, error management, caching integration, and cancellation.
 

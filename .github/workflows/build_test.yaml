@@ -1,0 +1,34 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ main ] # O il tuo branch principale
+  pull_request:
+    branches: [ main ] # O il tuo branch principale
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: 'stable' # Puoi specificare una versione esatta se necessario
+        channel: 'stable'
+        cache: true # Abilita la cache per velocizzare i build futuri
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Check formatting
+      run: flutter format --set-exit-if-changed .
+
+    - name: Analyze project code
+      run: flutter analyze
+
+    - name: Run tests
+      run: flutter test 

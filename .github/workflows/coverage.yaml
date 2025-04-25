@@ -1,0 +1,33 @@
+name: Code Coverage
+
+on:
+  push:
+    branches: [ main ] # O il tuo branch principale
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: 'stable'
+        channel: 'stable'
+        cache: true
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Run tests and collect coverage
+      run: flutter test --coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }} # Necessario per repo privati, raccomandato per pubblici
+        files: coverage/lcov.info # Path di default del report di coverage Flutter
+        fail_ci_if_error: true # Fa fallire il workflow se l'upload non va a buon fine 
