@@ -3,7 +3,7 @@ description: 'A network module for Flutter'
 version: 1.0.0
 
 environment:
-  sdk: ^3.7.0
+  sdk: '>=3.3.0 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
