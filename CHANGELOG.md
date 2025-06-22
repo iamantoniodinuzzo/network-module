@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security Scan**: Fixed "No active package pana" error with proper installation
 - **Git Flow Configuration**: Added `.gitflow` configuration file for consistent setup
 - **Workflow Maintenance**: Reduced maintenance overhead with streamlined structure
+- **Coverage Files**: Added coverage files to .gitignore to prevent Git tracking issues
 
 ### Security
 
