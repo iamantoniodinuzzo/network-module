@@ -31,13 +31,6 @@ import 'package:network_module/network_exception.dart';
 /// to this client's constructor.
 ///
 abstract class DioClient {
-  /// The underlying [Dio] instance used for network communication.
-  /// Protected to allow access in subclasses if needed, but primarily managed internally.
-  final Dio _dio;
-
-  /// Optional global cache options applied to requests if specific [cacheOptions]
-  /// are not provided for a particular request.
-  final CacheOptions? globalCacheOptions;
 
   /// Creates an instance of [DioClient].
   ///
@@ -60,6 +53,13 @@ abstract class DioClient {
       _dio.httpClientAdapter = httpClientAdapter;
     }
   }
+  /// The underlying [Dio] instance used for network communication.
+  /// Protected to allow access in subclasses if needed, but primarily managed internally.
+  final Dio _dio;
+
+  /// Optional global cache options applied to requests if specific [cacheOptions]
+  /// are not provided for a particular request.
+  final CacheOptions? globalCacheOptions;
 
   /// Sends a GET request to the specified [url].
   ///

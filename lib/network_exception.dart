@@ -7,30 +7,35 @@ enum NetworkErrorCode {
   connectionTimeout, // Request timed out
   connectionRefused, // Explicit connection error (e.g., refused)
   connectionDioError, // Other Dio connectionError type
-  sslError,          // SSL certificate issue
+  sslError, // SSL certificate issue
   networkUnreachable, // Generic connection issue (often from Dio unknown type)
 
   // Response Errors
-  badRequest,        // 400
-  unauthorized,      // 401
-  forbidden,         // 403
-  notFound,          // 404
-  serverError,       // 5xx
+  badRequest, // 400
+  unauthorized, // 401
+  forbidden, // 403
+  notFound, // 404
+  serverError, // 5xx
   responseUnhandled, // Other non-2xx status code not specifically handled
 
   // Other Errors
-  requestCancelled,    // Request was cancelled
+  requestCancelled, // Request was cancelled
   serializationError, // Error during data processing (if you add this later)
-  unknownError,      // Fallback for truly unexpected errors
+  unknownError, // Fallback for truly unexpected errors
   dioUnhandledError, // Fallback for unhandled DioException types
 }
-
 
 /// Base class for all network-related exceptions handled within the application.
 ///
 /// Contains structured data about the error, including a stable [code] for localization
 /// and a default English [message] for debugging or fallback.
 abstract class NetworkException implements Exception {
+  /// Creates a [NetworkException] instance.
+  const NetworkException(
+    this.message, {
+    required this.code,
+    this.statusCode,
+  });
 
   /// A stable error code representing the type of network error.
   /// Use this code in the application layer to look up localized messages.
@@ -43,13 +48,6 @@ abstract class NetworkException implements Exception {
   /// The HTTP status code associated with the error, if available.
   final int? statusCode;
 
-  /// Creates a [NetworkException] instance.
-  const NetworkException(
-    this.message, {
-    required this.code,
-    this.statusCode,
-  });
-
   @override
   String toString() =>
       'NetworkException(code: $code, message: $message${statusCode != null ? ', statusCode: $statusCode' : ''})';
@@ -60,14 +58,12 @@ abstract class NetworkException implements Exception {
 class NetworkTimeoutException extends NetworkException {
   /// Creates a [NetworkTimeoutException].
   NetworkTimeoutException([
-      super.message = 'Network request timed out.', // Default English message
-      NetworkErrorCode code = NetworkErrorCode.connectionTimeout // Specific code
+    super.message = 'Network request timed out.', // Default English message
+    NetworkErrorCode code = NetworkErrorCode.connectionTimeout, // Specific code
   ]) : super(code: code);
 }
 
 class NetworkResponseException extends NetworkException {
-  final dynamic responseData;
-
   /// Creates a [NetworkResponseException].
   const NetworkResponseException({
     required String message,
@@ -118,13 +114,14 @@ class NetworkResponseException extends NetworkException {
 
     return NetworkResponseException(
       message: message, // Default English/debug message
-      code: code,       // The crucial code for localization
+      code: code, // The crucial code for localization
       statusCode: statusCode,
       responseData: responseData,
     );
   }
+  final dynamic responseData;
 
-   @override
+  @override
   String toString() =>
       'NetworkResponseException(code: $code, message: $message, statusCode: $statusCode${responseData != null ? ', responseData available)' : ')'}';
 }
@@ -133,16 +130,16 @@ class NetworkCancelException extends NetworkException {
   /// Creates a [NetworkCancelException].
   const NetworkCancelException([
     super.message = 'Network request was cancelled.',
-    NetworkErrorCode code = NetworkErrorCode.requestCancelled
+    NetworkErrorCode code = NetworkErrorCode.requestCancelled,
   ]) : super(code: code);
 }
 
 class NetworkConnectionException extends NetworkException {
-   /// Creates a [NetworkConnectionException].
-   /// Requires specifying the underlying reason via the [code].
+  /// Creates a [NetworkConnectionException].
+  /// Requires specifying the underlying reason via the [code].
   const NetworkConnectionException({
     required String message, // Provide a specific default message
-    required super.code,   // e.g., connectionRefused, networkUnreachable
+    required super.code, // e.g., connectionRefused, networkUnreachable
   }) : super(message);
 }
 
@@ -150,20 +147,18 @@ class NetworkSSLException extends NetworkException {
   /// Creates a [NetworkSSLException].
   const NetworkSSLException([
     super.message = 'SSL certificate validation failed.',
-    NetworkErrorCode code = NetworkErrorCode.sslError
+    NetworkErrorCode code = NetworkErrorCode.sslError,
   ]) : super(code: code);
 }
 
-
 class UnknownNetworkErrorException extends NetworkException {
-  final Object? originalError;
-
   /// Creates an [UnknownNetworkErrorException].
   const UnknownNetworkErrorException({
     String message = 'An unknown network error occurred.',
     required super.code, // e.g., unknownError, dioUnhandledError
     this.originalError,
   }) : super(message);
+  final Object? originalError;
 
   @override
   String toString() =>
