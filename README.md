@@ -507,3 +507,64 @@ final apiClient = ApiClient(
 ## Testing
 
 The use of dependency injection (passing the `Dio` instance) makes `DioClient` highly testable. Use a mocking framework like `mocktail` or `mockito` to mock the `Dio` instance and verify interactions or simulate responses/errors. Refer to the `test/dio_client_test.dart` file in this package for detailed examples.
+
+## Contributing
+
+We welcome contributions! This project follows **Git Flow** for development:
+
+* **`main`**: Production-ready code
+* **`develop`**: Integration branch for features
+* **`feature/*`**: New features (branch from `develop`)
+* **`hotfix/*`**: Critical fixes (branch from `main`)
+
+### Quick Start for Contributors
+
+#### Standard Git Commands
+
+```bash
+# 1. Fork and clone
+git clone https://github.com/YOUR_USERNAME/network-module.git
+cd network-module
+
+# 2. Create feature branch
+git checkout develop
+git pull origin develop
+git checkout -b feature/your-feature-name
+
+# 3. Make changes, commit, push
+git add .
+git commit -m "feat: your feature description"
+git push origin feature/your-feature-name
+
+# 4. Create PR targeting develop
+```
+
+#### Git Flow Extension (optional)
+
+```bash
+# 1. Initialize (one time) - uses .gitflow config
+git flow init -d
+
+# 2. Start feature
+git flow feature start your-feature-name
+
+# 3. Make changes and commit
+git add .
+git commit -m "feat: your feature description"
+
+# 4. Finish feature (merges to develop)
+git flow feature finish your-feature-name
+```
+
+For detailed contribution guidelines, see [CONTRIBUTING.md](.github/CONTRIBUTING.md).
+
+### Development Workflow
+
+* **Features** → PR to `develop`
+* **Hotfixes** → PR to `main`
+* **CI/CD** runs on `main` and `develop` only
+* **Quick validation** runs on feature branches
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.

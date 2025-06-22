@@ -1,0 +1,156 @@
+name: 🐛 Bug Report
+description: Report a bug or issue with the network module
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! 🐛
+        
+        Before submitting, please:
+        - Search existing issues to avoid duplicates
+        - Make sure you're using the latest version
+        - Check the documentation and examples
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify these steps before submitting
+      options:
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
+        - label: I am using the latest version of the package
+          required: true
+        - label: I have read the documentation and examples
+          required: true
+
+  - type: input
+    id: package_version
+    attributes:
+      label: Package Version
+      description: Which version of network_module are you using?
+      placeholder: "e.g., 1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: flutter_version
+    attributes:
+      label: Flutter Version
+      description: Which Flutter version are you using?
+      options:
+        - "3.19.x (latest stable)"
+        - "3.16.x"
+        - "3.13.x"
+        - "3.10.x"
+        - "Other (specify in description)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: On which platform(s) does this bug occur?
+      multiple: true
+      options:
+        - "Android"
+        - "iOS"
+        - "Web"
+        - "Windows"
+        - "macOS"
+        - "Linux"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: "Describe the bug..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: "I expected..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: "Instead, what happened was..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the issue
+      placeholder: |
+        1. Create a DioClient with...
+        2. Call the method...
+        3. Observe the error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: code_sample
+    attributes:
+      label: Code Sample
+      description: Minimal code sample that reproduces the issue
+      render: dart
+      placeholder: |
+        // Minimal reproducible example
+        final client = MyDioClient();
+        try {
+          final response = await client.get('/api/test');
+        } catch (e) {
+          // Error occurs here
+        }
+    validations:
+      required: false
+
+  - type: textarea
+    id: error_logs
+    attributes:
+      label: Error Logs
+      description: Any error messages, stack traces, or logs
+      render: text
+      placeholder: "Paste error logs here..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem
+      placeholder: "Add any other context, screenshots, or relevant information..."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ### 📋 What happens next?
+        
+        1. **Triage**: We'll review and label your issue
+        2. **Investigation**: We'll investigate and may ask for more details
+        3. **Fix**: If confirmed, we'll work on a fix
+        4. **Release**: The fix will be included in the next release
+        
+        Thank you for helping improve the network module! 🙏 

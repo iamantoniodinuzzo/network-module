@@ -1,70 +1,194 @@
-name: Build, Test, Analyze & Report Coverage
+name: CI/CD - Build, Test, Analyze & Coverage
 
 on:
   push:
     branches:
-      - main       # Esegui su push a main (post-merge di release/hotfix)
-      - develop    # Esegui su push a develop (post-merge di feature/release/hotfix)
-      # Opzionale, ma consigliato se si lavora direttamente su questi branch:
-      # - 'release/*'
-      # - 'hotfix/*'
+      - main
+      - develop
   pull_request:
-    # Esegui su PR che puntano ai branch principali di integrazione
     branches:
-      - main       # Fondamentale per PR da release/* e hotfix/*
-      - develop    # Fondamentale per PR da feature/*, release/*, hotfix/*
-      # Opzionale: se fai PR verso release/hotfix branches
-      # - 'release/*'
-      # - 'hotfix/*'
+      - main
+      - develop
+  workflow_dispatch: # Permette esecuzione manuale
+
+env:
+  FLUTTER_CHANNEL: 'stable'
 
 jobs:
-  build_test_analyze_coverage: 
-    name: Build, Test, Analyze & Coverage
+  # Job 1: Analisi statica e linting
+  analyze:
+    name: 🔍 Code Analysis
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable'
-        cache: true
-        cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
-        cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:'
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
 
-    - name: Cache Flutter dependencies
-      uses: actions/cache@v4
-      with:
-        path: ${{ env.FLUTTER_ROOT }}/.pub-cache
-        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-pub-
+      - name: 📦 Get dependencies
+        run: flutter pub get
 
-    - name: Install dependencies
-      run: flutter pub get
+      - name: 🔍 Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
 
-    - name: Analyze project code
-      run: flutter analyze
+      - name: 📊 Analyze project source
+        run: flutter analyze --fatal-infos
 
-    - name: Run tests and collect coverage
-      run: flutter test --coverage
+      - name: 🔧 Check pub dependencies
+        run: flutter pub deps
 
-    # Opzionale: Processare lcov.info se necessario (es. rimuovere file generati)
-    # - name: Clean coverage report (example)
-    #   run: |
-    #     sudo apt-get update && sudo apt-get install -y lcov # Installa lcov se non presente
-    #     lcov --remove coverage/lcov.info 'lib/**.g.dart' 'lib/**.freezed.dart' -o coverage/lcov_cleaned.info
+  # Job 2: Test su multiple versioni
+  test:
+    name: 🧪 Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: analyze
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4 # O la versione che preferisci (v4 è stabile)
-      # Usa `with` per fornire opzioni all'azione
-      with:
-          token: ${{ secrets.CODECOV_TOKEN }} # Obbligatorio per repo privati, buona pratica per pubblici
-          files: coverage/lcov.info # O coverage/lcov_cleaned.info se l'hai processato
-          fail_ci_if_error: true # Fa fallire il workflow se l'upload non va a buon fine
-          verbose: true # Utile per il debug in caso di problemi con l'upload
+    strategy:
+      matrix:
+        flutter-channel: ['stable', 'beta']
+      fail-fast: false
 
-    # - name: Check if ready for publishing (Dry Run) # Passo opzionale
-    #   run: flutter pub publish --dry-run
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐦 Setup Flutter ${{ matrix.flutter-channel }}
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.flutter-channel }}
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🧪 Run tests
+        run: flutter test --reporter=expanded
+
+      - name: 🧪 Run tests with coverage (only for stable Flutter)
+        if: matrix.flutter-channel == 'stable'
+        run: flutter test --coverage --reporter=expanded
+
+      - name: 📊 Upload coverage to Codecov
+        if: matrix.flutter-channel == 'stable'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+          fail_ci_if_error: false # Non far fallire se Codecov ha problemi
+          verbose: true
+          flags: unittests
+          name: network-module-coverage
+
+  # Job 3: Build e validazione package
+  build:
+    name: 🏗️ Build & Package Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [analyze, test]
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🏗️ Build example app (debug)
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter build apk --debug
+
+      - name: 📋 Validate package for pub.dev
+        run: dart pub publish --dry-run
+
+      - name: 📊 Generate package documentation
+        run: dart doc
+
+      - name: 📤 Upload documentation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: doc/api/
+          retention-days: 30
+
+  # Job 4: Security scan
+  security:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: analyze
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🔒 Run security audit
+        run: dart pub deps --json | dart pub global run pana --json
+
+  # Job 5: Performance test (opzionale)
+  performance:
+    name: ⚡ Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: test
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'performance')
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: ⚡ Run performance tests
+        run: flutter test test/ --tags=performance --reporter=expanded
+
+  # Job finale: Status check
+  ci-success:
+    name: ✅ CI Success
+    runs-on: ubuntu-latest
+    needs: [analyze, test, build, security]
+    if: always()
+
+    steps:
+      - name: ✅ Check all jobs success
+        if: |
+          needs.analyze.result != 'success' ||
+          needs.test.result != 'success' ||
+          needs.build.result != 'success' ||
+          needs.security.result != 'success'
+        run: |
+          echo "❌ One or more jobs failed!"
+          exit 1
+
+      - name: 🎉 All checks passed
+        run: echo "✅ All CI checks passed successfully!"
