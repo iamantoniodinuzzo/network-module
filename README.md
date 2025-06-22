@@ -1,5 +1,10 @@
 # Network Module
+
+[![pub package](https://img.shields.io/pub/v/network_module.svg)](https://pub.dev/packages/network_module)
 [![codecov](https://codecov.io/gh/iamantoniodinuzzo/network-module/branch/main/graph/badge.svg)](https://codecov.io/gh/iamantoniodinuzzo/network-module)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Flutter](https://img.shields.io/badge/Flutter->=1.17.0-blue.svg)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart->=3.3.0-blue.svg)](https://dart.dev)
 
 A robust, reusable, and testable network layer package for Flutter applications, built on top of the powerful `dio` package. It provides a standardized way to handle network requests, error management, caching integration, and cancellation.
 
@@ -21,11 +26,9 @@ Add the package to your `pubspec.yaml` dependencies:
 
 ```yaml
 dependencies:
-  network_module: # Replace with your actual package name if published
-    # path: ../path/to/network_module # Or use git/hosted source
-  dio: ^5.x.x # Ensure compatibility
-  dio_cache_interceptor: ^3.x.x # Ensure compatibility
-  # Add other necessary dependencies if any
+  network_module: ^1.0.0
+  dio: ^5.8.0
+  dio_cache_interceptor: ^4.0.0
 ```
 
 Then run `flutter pub get`.
@@ -142,6 +145,7 @@ Then run `flutter pub get`.
       // showUserMessage(getLocalizedErrorMessage(exception.code));
     }
     ```
+
 ## Recommended Interceptors (Add to Dio)
 
 While `DioClient` handles the core request and final error mapping, **Dio Interceptors** are essential for managing concerns like logging, retries, caching, and authentication. These should be added to your `Dio` instance *before* passing it to `DioClient`.

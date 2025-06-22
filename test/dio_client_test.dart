@@ -1,10 +1,10 @@
 import 'dart:io' show FileSystemException;
 import 'dart:typed_data' show Uint8List;
 
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:network_module/dio_client.dart' show DioClient;
 import 'package:network_module/network_exception.dart';
 
@@ -35,7 +35,6 @@ void main() {
 
   final globalCacheOptions = CacheOptions(
     store: MemCacheStore(),
-    policy: CachePolicy.request,
   );
   final specificCacheOptions = CacheOptions(
     store: MemCacheStore(),
@@ -54,8 +53,7 @@ void main() {
     DioExceptionType type, {
     Response? response,
     dynamic error,
-  }) {
-    return DioException(
+  }) => DioException(
       requestOptions:
           requestOptions, // Assumes requestOptions is initialized in setUp
       type: type,
@@ -63,7 +61,6 @@ void main() {
       error: error,
       message: 'Test DioException: $type',
     );
-  }
 
   // Helper Function: createMockResponse
   MockResponse<T> createMockResponse<T>({
@@ -88,12 +85,10 @@ void main() {
 
     mockGetSuccessResponse = createMockResponse(
       reqOptions: requestOptions,
-      statusCode: 200,
       data: 'Success',
     );
     mockFetchSuccessResponse = createMockResponse<List<int>>(
       reqOptions: requestOptions,
-      statusCode: 200,
       data: Uint8List.fromList([1, 2, 3]),
     );
     mockPostSuccessResponse = createMockResponse(
@@ -103,18 +98,14 @@ void main() {
     );
     mockPutSuccessResponse = createMockResponse(
       reqOptions: requestOptions,
-      statusCode: 200,
       data: {'id': '123', 'name': 'updated_test'},
     );
     mockDeleteSuccessResponse = createMockResponse(
       reqOptions: requestOptions,
       statusCode: 204,
-      data: null,
     );
     mockDownloadSuccessResponse = createMockResponse<dynamic>(
       reqOptions: requestOptions,
-      statusCode: 200,
-      data: null,
     );
   });
 
@@ -122,7 +113,7 @@ void main() {
     group('Constructor', () {
       // ... constructor tests ...
       test('should add interceptors if provided', () {
-        final mockInterceptor = Interceptor();
+        const mockInterceptor = Interceptor();
         final interceptors = [mockInterceptor];
         final dioForInterceptorTest = MockDio();
         when(
@@ -170,10 +161,6 @@ void main() {
         verify(
           () => mockDio.get(
             testUrl,
-            queryParameters: null,
-            options: null,
-            cancelToken: null,
-            onReceiveProgress: null,
           ),
         ).called(1);
       });
@@ -193,9 +180,6 @@ void main() {
           () => mockDio.get(
             testUrl,
             queryParameters: testParams,
-            options: null,
-            cancelToken: null,
-            onReceiveProgress: null,
           ),
         ).called(1);
       });
@@ -220,9 +204,6 @@ void main() {
             verify(
               () => mockDio.get(
                 testUrl,
-                queryParameters: null,
-                cancelToken: null,
-                onReceiveProgress: null,
                 options: captureAny(named: 'options'),
               ),
             ).captured;
@@ -257,9 +238,6 @@ void main() {
             verify(
               () => mockDio.get(
                 testUrl,
-                queryParameters: null,
-                cancelToken: null,
-                onReceiveProgress: null,
                 options: captureAny(named: 'options'),
               ),
             ).captured;
@@ -390,10 +368,6 @@ void main() {
               testUrl,
               data: testData,
               queryParameters: testParams,
-              options: null,
-              cancelToken: null,
-              onSendProgress: null,
-              onReceiveProgress: null,
             ),
           ).called(1);
         },
@@ -427,10 +401,6 @@ void main() {
                 () => mockDio.post(
                   testUrl,
                   data: testData,
-                  queryParameters: null,
-                  cancelToken: null,
-                  onSendProgress: null,
-                  onReceiveProgress: null,
                   options: captureAny(named: 'options'),
                 ),
               ).captured;
@@ -476,10 +446,6 @@ void main() {
                 () => mockDio.post(
                   testUrl,
                   data: testData,
-                  queryParameters: null,
-                  cancelToken: null,
-                  onSendProgress: null,
-                  onReceiveProgress: null,
                   options: captureAny(named: 'options'),
                 ),
               ).captured;
@@ -659,11 +625,6 @@ void main() {
           () => mockDio.put(
             testUrl,
             data: testData,
-            options: null,
-            queryParameters: null,
-            cancelToken: null,
-            onSendProgress: null,
-            onReceiveProgress: null,
           ),
         ).called(1);
       });
@@ -696,10 +657,6 @@ void main() {
                 () => mockDio.put(
                   testUrl,
                   data: testData,
-                  queryParameters: null,
-                  cancelToken: null,
-                  onSendProgress: null,
-                  onReceiveProgress: null,
                   options: captureAny(named: 'options'),
                 ),
               ).captured;
@@ -867,10 +824,6 @@ void main() {
           verify(
             () => mockDio.delete(
               testUrl,
-              data: null,
-              options: null,
-              queryParameters: null,
-              cancelToken: null,
             ),
           ).called(1);
         },
@@ -900,9 +853,6 @@ void main() {
               verify(
                 () => mockDio.delete(
                   testUrl,
-                  data: null,
-                  queryParameters: null,
-                  cancelToken: null,
                   options: captureAny(named: 'options'),
                 ),
               ).captured;
@@ -993,7 +943,7 @@ void main() {
       test(
         'should throw UnknownNetworkErrorException for non-Dio exceptions',
         () async {
-          final exception = FormatException('Bad format');
+          const exception = FormatException('Bad format');
           when(
             () => mockDio.delete(
               any(),
@@ -1061,8 +1011,6 @@ void main() {
               () => mockDio.get<List<int>>(
                 testUrl,
                 queryParameters: testParams,
-                cancelToken: null,
-                onReceiveProgress: null,
                 options: captureAny(named: 'options'),
               ),
             ).captured;
@@ -1095,9 +1043,6 @@ void main() {
             verify(
               () => mockDio.get<List<int>>(
                 testUrl,
-                queryParameters: null,
-                cancelToken: null,
-                onReceiveProgress: null,
                 options: captureAny(named: 'options'),
               ),
             ).captured;
@@ -1129,9 +1074,6 @@ void main() {
             verify(
               () => mockDio.get<List<int>>(
                 testUrl,
-                queryParameters: null,
-                cancelToken: null,
-                onReceiveProgress: null,
                 options: captureAny(named: 'options'),
               ),
             ).captured;
@@ -1176,9 +1118,6 @@ void main() {
               verify(
                 () => mockDio.get<List<int>>(
                   testUrl,
-                  queryParameters: null,
-                  cancelToken: null,
-                  onReceiveProgress: null,
                   options: captureAny(named: 'options'),
                 ),
               ).captured;
@@ -1271,7 +1210,7 @@ void main() {
       test(
         'should throw UnknownNetworkErrorException for non-Dio exceptions',
         () async {
-          final exception = FormatException('Bad format during processing');
+          const exception = FormatException('Bad format during processing');
           when(
             () => mockDio.get<List<int>>(
               any(),
@@ -1338,8 +1277,6 @@ void main() {
             testUrl,
             testSavePath,
             queryParameters: testParams,
-            options: null, // Expect null if none provided
-            cancelToken: null,
             onReceiveProgress: mockProgressCallback,
             deleteOnError: false,
           ),
@@ -1370,10 +1307,6 @@ void main() {
               () => mockDio.download(
                 testUrl,
                 testSavePath,
-                queryParameters: null,
-                cancelToken: null,
-                onReceiveProgress: null,
-                deleteOnError: true, // Default value
                 options: captureAny(named: 'options'),
               ),
             ).captured;
@@ -1384,7 +1317,7 @@ void main() {
         // Verify that either 'extra' is null OR it doesn't contain the cache key
         expect(
           capturedOptions?.extra == null ||
-              !(capturedOptions!.extra!.containsKey('@cache_options@')),
+              !capturedOptions!.extra!.containsKey('@cache_options@'),
           isTrue,
           reason:
               "Cache options should not be present in the 'extra' map for download",
@@ -1422,10 +1355,6 @@ void main() {
               () => mockDio.download(
                 testUrl,
                 testSavePath,
-                queryParameters: null,
-                cancelToken: null,
-                onReceiveProgress: null,
-                deleteOnError: true,
                 options: captureAny(named: 'options'),
               ),
             ).captured;
@@ -1435,7 +1364,7 @@ void main() {
         // Verify that either 'extra' is null OR it doesn't contain the cache key
         expect(
           capturedOptions?.extra == null ||
-              !(capturedOptions!.extra!.containsKey('@cache_options@')),
+              !capturedOptions!.extra!.containsKey('@cache_options@'),
           isTrue,
           reason:
               "Cache options should not be present in the 'extra' map for download, even if provided",
@@ -1521,7 +1450,7 @@ void main() {
         'should throw NetworkConnectionException (or related) on DioExceptionType.unknown from download',
         () async {
           // Dio might wrap file system errors (like path not found) as 'unknown'
-          final fileSystemError = FileSystemException(
+          const fileSystemError = FileSystemException(
             'Cannot open file',
             testSavePath,
           );
@@ -1559,7 +1488,7 @@ void main() {
         'should throw UnknownNetworkErrorException for non-Dio filesystem exceptions',
         () async {
           // Simulate an error happening outside Dio's direct handling during download
-          final exception = FileSystemException(
+          const exception = FileSystemException(
             'Permission denied',
             testSavePath,
           );
