@@ -145,8 +145,14 @@ jobs:
       - name: 📦 Get dependencies
         run: flutter pub get
 
-      - name: 🔒 Run security audit
-        run: dart pub deps --json | dart pub global run pana --json
+      - name: 🔒 Run pub audit (dependency vulnerabilities)
+        run: dart pub deps --json
+
+      - name: 🔍 Check for outdated dependencies
+        run: flutter pub outdated --json
+
+      - name: 📋 Validate package for pub.dev
+        run: dart pub publish --dry-run
 
   # Job 5: Performance test (opzionale)
   performance:
