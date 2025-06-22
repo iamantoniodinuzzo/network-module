@@ -47,10 +47,17 @@ jobs:
 
       - name: 🔧 Setup pub credentials
         run: |
+          if [ -z "${{ secrets.PUB_DEV_CREDENTIALS }}" ]; then
+            echo "❌ PUB_DEV_CREDENTIALS secret is not set!"
+            echo "Please follow the guide in PUB_CREDENTIALS_SETUP.md"
+            exit 1
+          fi
           mkdir -p ~/.pub-cache
           echo '${{ secrets.PUB_DEV_CREDENTIALS }}' > ~/.pub-cache/credentials.json
+          echo "✅ Pub credentials configured"
 
       - name: 🚀 Publish to pub.dev
+        timeout-minutes: 5
         run: |
           echo "🚀 Publishing version ${{ steps.version.outputs.version }}..."
           dart pub publish --force
