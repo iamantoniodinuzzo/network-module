@@ -1,0 +1,75 @@
+name: 📦 Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  FLUTTER_CHANNEL: 'stable'
+
+jobs:
+  publish:
+    name: 📦 Publish to pub.dev & GitHub
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🧪 Run tests
+        run: flutter test --reporter=expanded
+
+      - name: 📋 Validate package
+        run: dart pub publish --dry-run
+
+      - name: 📊 Get version
+        id: version
+        run: |
+          VERSION=$(grep "^version:" pubspec.yaml | cut -d' ' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Version: $VERSION"
+
+      - name: 🔧 Setup pub credentials
+        run: |
+          mkdir -p ~/.pub-cache
+          echo '${{ secrets.PUB_DEV_CREDENTIALS }}' > ~/.pub-cache/credentials.json
+
+      - name: 🚀 Publish to pub.dev
+        run: |
+          echo "🚀 Publishing version ${{ steps.version.outputs.version }}..."
+          dart pub publish --force
+          echo "✅ Published to pub.dev!"
+
+      - name: 📋 Extract changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "## Release $VERSION" > release_notes.md
+            echo "See [CHANGELOG.md](CHANGELOG.md) for details." >> release_notes.md
+          fi
+
+      - name: 🏷️ Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release v${{ steps.version.outputs.version }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

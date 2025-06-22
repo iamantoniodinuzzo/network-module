@@ -1,0 +1,58 @@
+name: 🧪 CI - Test & Analyze
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  FLUTTER_CHANNEL: 'stable'
+
+jobs:
+  test-and-analyze:
+    name: 🧪 Test & Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🔍 Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: 📊 Analyze project source
+        run: flutter analyze --fatal-infos
+
+      - name: 🧪 Run tests
+        run: flutter test --reporter=expanded
+
+      - name: 🧪 Run tests with coverage
+        run: flutter test --coverage --reporter=expanded
+
+      - name: 📊 Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+          fail_ci_if_error: false
+          verbose: true
+          flags: unittests
+          name: network-module-coverage
+
+      - name: 📋 Validate package for pub.dev
+        run: dart pub publish --dry-run 
