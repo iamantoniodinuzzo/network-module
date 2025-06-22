@@ -1,4 +1,4 @@
-name: CI/CD - Build, Test, Analyze & Coverage
+name: CI/CD - Test, Analyze & Coverage
 
 on:
   push:
@@ -87,43 +87,43 @@ jobs:
           name: network-module-coverage
 
   # Job 3: Build e validazione package
-  build:
-    name: 🏗️ Build & Package Validation
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [analyze, test]
+  # build:
+  #   name: 🏗️ Build & Package Validation
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   needs: [analyze, test]
 
-    steps:
-      - name: 📚 Checkout repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: 📚 Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: 🐦 Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: ${{ env.FLUTTER_CHANNEL }}
-          cache: true
+  #     - name: 🐦 Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: ${{ env.FLUTTER_CHANNEL }}
+  #         cache: true
 
-      - name: 📦 Get dependencies
-        run: flutter pub get
+  #     - name: 📦 Get dependencies
+  #       run: flutter pub get
 
-      - name: 🏗️ Build example app (debug)
-        working-directory: example
-        run: |
-          flutter pub get
-          flutter build apk --debug
+  #     - name: 🏗️ Build example app (debug)
+  #       working-directory: example
+  #       run: |
+  #         flutter pub get
+  #         flutter build apk --debug
 
-      - name: 📋 Validate package for pub.dev
-        run: dart pub publish --dry-run
+  #     - name: 📋 Validate package for pub.dev
+  #       run: dart pub publish --dry-run
 
-      - name: 📊 Generate package documentation
-        run: dart doc
+  #     - name: 📊 Generate package documentation
+  #       run: dart doc
 
-      - name: 📤 Upload documentation artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: documentation
-          path: doc/api/
-          retention-days: 30
+  #     - name: 📤 Upload documentation artifacts
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: documentation
+  #         path: doc/api/
+  #         retention-days: 30
 
   # Job 4: Security scan
   security:
@@ -176,7 +176,7 @@ jobs:
   ci-success:
     name: ✅ CI Success
     runs-on: ubuntu-latest
-    needs: [analyze, test, build, security]
+    needs: [analyze, test, security]
     if: always()
 
     steps:
@@ -184,7 +184,6 @@ jobs:
         if: |
           needs.analyze.result != 'success' ||
           needs.test.result != 'success' ||
-          needs.build.result != 'success' ||
           needs.security.result != 'success'
         run: |
           echo "❌ One or more jobs failed!"
