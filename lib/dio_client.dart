@@ -31,14 +31,6 @@ import 'package:network_module/network_exception.dart';
 /// to this client's constructor.
 ///
 abstract class DioClient {
-  /// The underlying [Dio] instance used for network communication.
-  /// Protected to allow access in subclasses if needed, but primarily managed internally.
-  final Dio _dio;
-
-  /// Optional global cache options applied to requests if specific [cacheOptions]
-  /// are not provided for a particular request.
-  final CacheOptions? globalCacheOptions;
-
   /// Creates an instance of [DioClient].
   ///
   /// Requires a configured [Dio] instance ([dioClient]).
@@ -60,6 +52,14 @@ abstract class DioClient {
       _dio.httpClientAdapter = httpClientAdapter;
     }
   }
+
+  /// The underlying [Dio] instance used for network communication.
+  /// Protected to allow access in subclasses if needed, but primarily managed internally.
+  final Dio _dio;
+
+  /// Optional global cache options applied to requests if specific [cacheOptions]
+  /// are not provided for a particular request.
+  final CacheOptions? globalCacheOptions;
 
   /// Sends a GET request to the specified [url].
   ///
@@ -363,9 +363,8 @@ abstract class DioClient {
       throw UnknownNetworkErrorException(
         message:
             'Unexpected error during download request processing (check network, path, and permissions): $e',
-        code:
-            NetworkErrorCode
-                .unknownError, // Could refine code if needed, but unknown is safe
+        code: NetworkErrorCode
+            .unknownError, // Could refine code if needed, but unknown is safe
         originalError: e,
       );
     }

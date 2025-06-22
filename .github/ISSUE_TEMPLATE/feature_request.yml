@@ -1,0 +1,123 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement for the network module
+title: "[FEATURE] "
+labels: ["enhancement", "needs-discussion"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! ✨
+        
+        Before submitting, please:
+        - Search existing issues to avoid duplicates
+        - Check if the feature aligns with the package goals
+        - Consider if it can be implemented as a separate package
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify these steps before submitting
+      options:
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
+        - label: I have considered if this feature aligns with the package scope
+          required: true
+        - label: I have checked the current documentation and examples
+          required: true
+
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like to see
+      placeholder: "I would like to see..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_statement
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What's the current limitation?
+      placeholder: "Currently, when I try to... I face the problem that..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution
+      description: How would you like this feature to work?
+      placeholder: "I propose that..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: api_design
+    attributes:
+      label: API Design (Optional)
+      description: If you have ideas about the API design, please share them
+      render: dart
+      placeholder: |
+        // Example API usage
+        final client = DioClient();
+        final result = await client.newFeature();
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What alternative solutions have you considered?
+      placeholder: "I've considered..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - "Low - Nice to have"
+        - "Medium - Would improve my workflow"
+        - "High - Critical for my use case"
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_cases
+    attributes:
+      label: Use Cases
+      description: Describe specific use cases where this feature would be helpful
+      placeholder: |
+        1. When building a mobile app that needs...
+        2. In scenarios where developers want to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any other context, examples, or relevant information
+      placeholder: "Additional information..."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ### 📋 What happens next?
+        
+        1. **Discussion**: We'll discuss the feature and its feasibility
+        2. **Design**: If approved, we'll work on the API design
+        3. **Implementation**: We'll implement the feature
+        4. **Release**: The feature will be included in a future release
+        
+        Thank you for helping improve the network module! 🙏 

@@ -1,5 +1,10 @@
 # Network Module
+
+[![pub package](https://img.shields.io/pub/v/network_module.svg)](https://pub.dev/packages/network_module)
 [![codecov](https://codecov.io/gh/iamantoniodinuzzo/network-module/branch/main/graph/badge.svg)](https://codecov.io/gh/iamantoniodinuzzo/network-module)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Flutter](https://img.shields.io/badge/Flutter->=1.17.0-blue.svg)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart->=3.3.0-blue.svg)](https://dart.dev)
 
 A robust, reusable, and testable network layer package for Flutter applications, built on top of the powerful `dio` package. It provides a standardized way to handle network requests, error management, caching integration, and cancellation.
 
@@ -21,11 +26,9 @@ Add the package to your `pubspec.yaml` dependencies:
 
 ```yaml
 dependencies:
-  network_module: # Replace with your actual package name if published
-    # path: ../path/to/network_module # Or use git/hosted source
-  dio: ^5.x.x # Ensure compatibility
-  dio_cache_interceptor: ^3.x.x # Ensure compatibility
-  # Add other necessary dependencies if any
+  network_module: ^1.0.0
+  dio: ^5.8.0
+  dio_cache_interceptor: ^4.0.0
 ```
 
 Then run `flutter pub get`.
@@ -142,6 +145,7 @@ Then run `flutter pub get`.
       // showUserMessage(getLocalizedErrorMessage(exception.code));
     }
     ```
+
 ## Recommended Interceptors (Add to Dio)
 
 While `DioClient` handles the core request and final error mapping, **Dio Interceptors** are essential for managing concerns like logging, retries, caching, and authentication. These should be added to your `Dio` instance *before* passing it to `DioClient`.
@@ -503,3 +507,64 @@ final apiClient = ApiClient(
 ## Testing
 
 The use of dependency injection (passing the `Dio` instance) makes `DioClient` highly testable. Use a mocking framework like `mocktail` or `mockito` to mock the `Dio` instance and verify interactions or simulate responses/errors. Refer to the `test/dio_client_test.dart` file in this package for detailed examples.
+
+## Contributing
+
+We welcome contributions! This project follows **Git Flow** for development:
+
+* **`main`**: Production-ready code
+* **`develop`**: Integration branch for features
+* **`feature/*`**: New features (branch from `develop`)
+* **`hotfix/*`**: Critical fixes (branch from `main`)
+
+### Quick Start for Contributors
+
+#### Standard Git Commands
+
+```bash
+# 1. Fork and clone
+git clone https://github.com/YOUR_USERNAME/network-module.git
+cd network-module
+
+# 2. Create feature branch
+git checkout develop
+git pull origin develop
+git checkout -b feature/your-feature-name
+
+# 3. Make changes, commit, push
+git add .
+git commit -m "feat: your feature description"
+git push origin feature/your-feature-name
+
+# 4. Create PR targeting develop
+```
+
+#### Git Flow Extension (optional)
+
+```bash
+# 1. Initialize (one time) - uses .gitflow config
+git flow init -d
+
+# 2. Start feature
+git flow feature start your-feature-name
+
+# 3. Make changes and commit
+git add .
+git commit -m "feat: your feature description"
+
+# 4. Finish feature (merges to develop)
+git flow feature finish your-feature-name
+```
+
+For detailed contribution guidelines, see [CONTRIBUTING.md](.github/CONTRIBUTING.md).
+
+### Development Workflow
+
+* **Features** → PR to `develop`
+* **Hotfixes** → PR to `main`
+* **CI/CD** runs on `main` and `develop` only
+* **Quick validation** runs on feature branches
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
