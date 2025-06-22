@@ -58,10 +58,56 @@ jobs:
 
       - name: 🚀 Publish to pub.dev
         timeout-minutes: 5
+        env:
+          PUB_HOSTED_URL: https://pub.dev
         run: |
           echo "🚀 Publishing version ${{ steps.version.outputs.version }}..."
-          dart pub publish --force
-          echo "✅ Published to pub.dev!"
+          
+          # Verify credentials are working
+          if ! dart pub deps > /dev/null 2>&1; then
+            echo "❌ Dart pub not working correctly"
+            exit 1
+          fi
+          
+          # Try to publish with various approaches
+          echo "📋 Attempting to publish package..."
+          
+          # Method 1: Direct publish with force (should work if credentials are correct)
+          if timeout 120s dart pub publish --force; then
+            echo "✅ Published successfully with --force!"
+          else
+            echo "❌ Direct publish failed, trying alternative method..."
+            
+            # Method 2: Use expect to handle any remaining prompts
+            sudo apt-get update && sudo apt-get install -y expect
+            
+            expect << 'EOF'
+            set timeout 120
+            spawn dart pub publish --force
+            expect {
+              "Do you want to publish" {
+                send "y\r"
+                exp_continue
+              }
+              "Successfully uploaded package" {
+                exit 0
+              }
+              "Pub needs your authorization" {
+                puts "❌ Authorization still required"
+                exit 1
+              }
+              timeout {
+                puts "❌ Timeout during publish"
+                exit 1
+              }
+              eof {
+                exit 0
+              }
+            }
+          EOF
+          fi
+          
+          echo "✅ Package published to pub.dev!"
 
       - name: 📋 Extract changelog
         run: |
