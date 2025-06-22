@@ -31,7 +31,7 @@ jobs:
       # Esempio con conventional-changelog-action:
       - name: Generate Changelog
         id: changelog
-        uses: TriPSs/conventional-changelog-action@v5 # Controlla l'ultima versione
+        uses: TriPSs/conventional-changelog-action@v6 # Controlla l'ultima versione
         with:
           # GITHUB_TOKEN è necessario per recuperare info su commit/PR/issues
           github-token: ${{ secrets.GITHUB_TOKEN }}
