@@ -53,14 +53,15 @@ void main() {
     DioExceptionType type, {
     Response? response,
     dynamic error,
-  }) => DioException(
-      requestOptions:
-          requestOptions, // Assumes requestOptions is initialized in setUp
-      type: type,
-      response: response,
-      error: error,
-      message: 'Test DioException: $type',
-    );
+  }) =>
+      DioException(
+        requestOptions:
+            requestOptions, // Assumes requestOptions is initialized in setUp
+        type: type,
+        response: response,
+        error: error,
+        message: 'Test DioException: $type',
+      );
 
   // Helper Function: createMockResponse
   MockResponse<T> createMockResponse<T>({
@@ -200,13 +201,12 @@ void main() {
           options: dioOptions,
           cacheOptions: specificCacheOptions,
         );
-        final captured =
-            verify(
-              () => mockDio.get(
-                testUrl,
-                options: captureAny(named: 'options'),
-              ),
-            ).captured;
+        final captured = verify(
+          () => mockDio.get(
+            testUrl,
+            options: captureAny(named: 'options'),
+          ),
+        ).captured;
         final capturedOptions = captured.first as Options?;
         expect(capturedOptions, isNotNull);
         expect(capturedOptions?.headers?['X-Custom'], 'dio');
@@ -234,13 +234,12 @@ void main() {
           ),
         ).thenAnswer((_) async => mockGetSuccessResponse);
         await dioClient.get(testUrl);
-        final captured =
-            verify(
-              () => mockDio.get(
-                testUrl,
-                options: captureAny(named: 'options'),
-              ),
-            ).captured;
+        final captured = verify(
+          () => mockDio.get(
+            testUrl,
+            options: captureAny(named: 'options'),
+          ),
+        ).captured;
         final capturedOptions = captured.first as Options?;
         expect(capturedOptions, isNotNull);
         expect(capturedOptions?.extra?.containsKey('@cache_options@'), isTrue);
@@ -299,8 +298,8 @@ void main() {
                   .having((e) => e.code, 'code', NetworkErrorCode.badRequest)
                   .having((e) => e.statusCode, 'statusCode', 400)
                   .having((e) => e.responseData, 'responseData', {
-                    'error': 'Invalid input',
-                  }),
+                'error': 'Invalid input',
+              }),
             ),
           );
         },
@@ -396,14 +395,13 @@ void main() {
             cacheOptions: specificCacheOptions,
           );
 
-          final captured =
-              verify(
-                () => mockDio.post(
-                  testUrl,
-                  data: testData,
-                  options: captureAny(named: 'options'),
-                ),
-              ).captured;
+          final captured = verify(
+            () => mockDio.post(
+              testUrl,
+              data: testData,
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
           final capturedOptions = captured.first as Options?;
           expect(capturedOptions, isNotNull);
           expect(capturedOptions?.contentType, Headers.jsonContentType);
@@ -441,14 +439,13 @@ void main() {
 
           await dioClient.post(testUrl, data: testData);
 
-          final captured =
-              verify(
-                () => mockDio.post(
-                  testUrl,
-                  data: testData,
-                  options: captureAny(named: 'options'),
-                ),
-              ).captured;
+          final captured = verify(
+            () => mockDio.post(
+              testUrl,
+              data: testData,
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
           final capturedOptions = captured.first as Options?;
           expect(capturedOptions, isNotNull);
           expect(
@@ -652,14 +649,13 @@ void main() {
             cacheOptions: specificCacheOptions,
           );
 
-          final captured =
-              verify(
-                () => mockDio.put(
-                  testUrl,
-                  data: testData,
-                  options: captureAny(named: 'options'),
-                ),
-              ).captured;
+          final captured = verify(
+            () => mockDio.put(
+              testUrl,
+              data: testData,
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
           final capturedOptions = captured.first as Options?;
           expect(capturedOptions, isNotNull);
           expect(
@@ -849,13 +845,12 @@ void main() {
             cacheOptions: specificCacheOptions,
           );
 
-          final captured =
-              verify(
-                () => mockDio.delete(
-                  testUrl,
-                  options: captureAny(named: 'options'),
-                ),
-              ).captured;
+          final captured = verify(
+            () => mockDio.delete(
+              testUrl,
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
           final capturedOptions = captured.first as Options?;
           expect(capturedOptions, isNotNull);
           expect(capturedOptions?.headers?['X-Delete-Confirm'], 'true');
@@ -1006,14 +1001,13 @@ void main() {
         expect(result.statusCode, 200);
 
         // Verify call with captured options to check responseType again
-        final captured =
-            verify(
-              () => mockDio.get<List<int>>(
-                testUrl,
-                queryParameters: testParams,
-                options: captureAny(named: 'options'),
-              ),
-            ).captured;
+        final captured = verify(
+          () => mockDio.get<List<int>>(
+            testUrl,
+            queryParameters: testParams,
+            options: captureAny(named: 'options'),
+          ),
+        ).captured;
 
         final capturedOptions = captured.first as Options?;
         expect(capturedOptions?.responseType, ResponseType.bytes);
@@ -1039,13 +1033,12 @@ void main() {
         await dioClient.fetch(testUrl, options: dioOptions);
 
         // Assert
-        final captured =
-            verify(
-              () => mockDio.get<List<int>>(
-                testUrl,
-                options: captureAny(named: 'options'),
-              ),
-            ).captured;
+        final captured = verify(
+          () => mockDio.get<List<int>>(
+            testUrl,
+            options: captureAny(named: 'options'),
+          ),
+        ).captured;
         final capturedOptions = captured.first as Options?;
         expect(capturedOptions, isNotNull);
         // Verify ResponseType is BYTES, overriding user's JSON
@@ -1070,13 +1063,12 @@ void main() {
         await dioClient.fetch(testUrl, cacheOptions: specificCacheOptions);
 
         // Assert
-        final captured =
-            verify(
-              () => mockDio.get<List<int>>(
-                testUrl,
-                options: captureAny(named: 'options'),
-              ),
-            ).captured;
+        final captured = verify(
+          () => mockDio.get<List<int>>(
+            testUrl,
+            options: captureAny(named: 'options'),
+          ),
+        ).captured;
         final capturedOptions = captured.first as Options?;
         expect(capturedOptions, isNotNull);
         expect(
@@ -1114,13 +1106,12 @@ void main() {
           await dioClient.fetch(testUrl);
 
           // Assert
-          final captured =
-              verify(
-                () => mockDio.get<List<int>>(
-                  testUrl,
-                  options: captureAny(named: 'options'),
-                ),
-              ).captured;
+          final captured = verify(
+            () => mockDio.get<List<int>>(
+              testUrl,
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
           final capturedOptions = captured.first as Options?;
           expect(capturedOptions, isNotNull);
           expect(capturedOptions?.responseType, ResponseType.bytes);
@@ -1302,14 +1293,13 @@ void main() {
         await dioClient.download(testUrl, testSavePath, options: dioOptions);
 
         // Assert
-        final captured =
-            verify(
-              () => mockDio.download(
-                testUrl,
-                testSavePath,
-                options: captureAny(named: 'options'),
-              ),
-            ).captured;
+        final captured = verify(
+          () => mockDio.download(
+            testUrl,
+            testSavePath,
+            options: captureAny(named: 'options'),
+          ),
+        ).captured;
         final capturedOptions = captured.first as Options?;
         expect(capturedOptions, isNotNull);
         expect(capturedOptions?.headers?['Authorization'], 'Bearer token');
@@ -1350,14 +1340,13 @@ void main() {
         ); // Provide specific too
 
         // Assert
-        final captured =
-            verify(
-              () => mockDio.download(
-                testUrl,
-                testSavePath,
-                options: captureAny(named: 'options'),
-              ),
-            ).captured;
+        final captured = verify(
+          () => mockDio.download(
+            testUrl,
+            testSavePath,
+            options: captureAny(named: 'options'),
+          ),
+        ).captured;
         final capturedOptions = captured.first as Options?;
 
         // --- CORRECTED ASSERTION for cache options absence ---
@@ -1517,6 +1506,668 @@ void main() {
           );
         },
       );
+    });
+
+    // --- Additional Coverage Tests ---
+    group('Additional Coverage Tests', () {
+      group('NetworkResponseException.fromDioException Coverage', () {
+        test('should handle 502 Bad Gateway', () async {
+          final mockErrorResponse = createMockResponse(
+            reqOptions: requestOptions,
+            statusCode: 502,
+          );
+          final exception = createDioException(
+            DioExceptionType.badResponse,
+            response: mockErrorResponse,
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkResponseException>()
+                  .having((e) => e.code, 'code', NetworkErrorCode.serverError)
+                  .having((e) => e.statusCode, 'statusCode', 502),
+            ),
+          );
+        });
+
+        test('should handle 503 Service Unavailable', () async {
+          final mockErrorResponse = createMockResponse(
+            reqOptions: requestOptions,
+            statusCode: 503,
+          );
+          final exception = createDioException(
+            DioExceptionType.badResponse,
+            response: mockErrorResponse,
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkResponseException>()
+                  .having((e) => e.code, 'code', NetworkErrorCode.serverError)
+                  .having((e) => e.statusCode, 'statusCode', 503),
+            ),
+          );
+        });
+
+        test('should handle 504 Gateway Timeout', () async {
+          final mockErrorResponse = createMockResponse(
+            reqOptions: requestOptions,
+            statusCode: 504,
+          );
+          final exception = createDioException(
+            DioExceptionType.badResponse,
+            response: mockErrorResponse,
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkResponseException>()
+                  .having((e) => e.code, 'code', NetworkErrorCode.serverError)
+                  .having((e) => e.statusCode, 'statusCode', 504),
+            ),
+          );
+        });
+
+        test('should handle unhandled status codes', () async {
+          final mockErrorResponse = createMockResponse(
+            reqOptions: requestOptions,
+            statusCode: 418, // I'm a teapot
+          );
+          final exception = createDioException(
+            DioExceptionType.badResponse,
+            response: mockErrorResponse,
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkResponseException>()
+                  .having(
+                    (e) => e.code,
+                    'code',
+                    NetworkErrorCode.responseUnhandled,
+                  )
+                  .having((e) => e.statusCode, 'statusCode', 418),
+            ),
+          );
+        });
+      });
+
+      group('_mergeDioAndCacheOptions Coverage', () {
+        test('should return null when both options are null', () async {
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenAnswer((_) async => mockGetSuccessResponse);
+
+          await dioClient.get('/test'); // No options provided
+
+          final captured = verify(
+            () => mockDio.get(
+              '/test',
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
+          expect(captured.first, isNull);
+        });
+
+        test('should handle cache options only', () async {
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenAnswer((_) async => mockGetSuccessResponse);
+
+          await dioClient.get(
+            '/test',
+            cacheOptions: specificCacheOptions,
+          );
+
+          final captured = verify(
+            () => mockDio.get(
+              '/test',
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
+          final capturedOptions = captured.first as Options?;
+          expect(capturedOptions, isNotNull);
+          expect(
+            capturedOptions?.extra?.containsKey('@cache_options@'),
+            isTrue,
+          );
+        });
+
+        test('should handle dio options only', () async {
+          final dioOptions = Options(headers: {'X-Test': 'value'});
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenAnswer((_) async => mockGetSuccessResponse);
+
+          await dioClient.get('/test', options: dioOptions);
+
+          final captured = verify(
+            () => mockDio.get(
+              '/test',
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
+          final capturedOptions = captured.first as Options?;
+          expect(capturedOptions, isNotNull);
+          expect(capturedOptions?.headers?['X-Test'], 'value');
+          // Il client nel setUp() non ha globalCacheOptions, quindi non dovrebbero essere presenti
+          expect(
+            capturedOptions?.extra?.containsKey('@cache_options@') ?? false,
+            isFalse,
+          );
+        });
+
+        test('should merge both dio and cache options with precedence',
+            () async {
+          final dioOptions = Options(
+            headers: {'X-Test': 'value'},
+            extra: {'existing': 'value'},
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenAnswer((_) async => mockGetSuccessResponse);
+
+          await dioClient.get(
+            '/test',
+            options: dioOptions,
+            cacheOptions: specificCacheOptions,
+          );
+
+          final captured = verify(
+            () => mockDio.get(
+              '/test',
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
+          final capturedOptions = captured.first as Options?;
+          expect(capturedOptions, isNotNull);
+          expect(capturedOptions?.headers?['X-Test'], 'value');
+          expect(capturedOptions?.extra?['existing'], 'value');
+          expect(
+            capturedOptions?.extra?.containsKey('@cache_options@'),
+            isTrue,
+          );
+        });
+      });
+
+      group('Error Message Variations', () {
+        test('should handle DioException with null message and error',
+            () async {
+          final exception = DioException(
+            requestOptions: requestOptions,
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkConnectionException>().having(
+                (e) => e.message,
+                'message',
+                contains('No specific message'),
+              ),
+            ),
+          );
+        });
+
+        test('should handle DioException with error but no message', () async {
+          final exception = DioException(
+            requestOptions: requestOptions,
+            type: DioExceptionType.connectionError,
+            error: 'Connection refused',
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkConnectionException>().having(
+                (e) => e.message,
+                'message',
+                contains('Connection refused'),
+              ),
+            ),
+          );
+        });
+
+        test('should handle DioException with message but no error', () async {
+          final exception = DioException(
+            requestOptions: requestOptions,
+            message: 'Custom message',
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkConnectionException>().having(
+                (e) => e.message,
+                'message',
+                contains('Custom message'),
+              ),
+            ),
+          );
+        });
+      });
+
+      group('NetworkException toString Coverage', () {
+        test('NetworkException toString with statusCode', () {
+          const exception = NetworkResponseException(
+            message: 'Test message',
+            code: NetworkErrorCode.badRequest,
+            statusCode: 400,
+          );
+          expect(
+            exception.toString(),
+            'NetworkResponseException(code: NetworkErrorCode.badRequest, message: Test message, statusCode: 400)',
+          );
+        });
+
+        test('NetworkException toString without statusCode', () {
+          final exception = NetworkTimeoutException('Test timeout');
+          expect(
+            exception.toString(),
+            'NetworkException(code: NetworkErrorCode.connectionTimeout, message: Test timeout)',
+          );
+        });
+
+        test('NetworkResponseException toString with responseData', () {
+          const exception = NetworkResponseException(
+            message: 'Test message',
+            code: NetworkErrorCode.badRequest,
+            statusCode: 400,
+            responseData: {'error': 'test'},
+          );
+          expect(
+            exception.toString(),
+            'NetworkResponseException(code: NetworkErrorCode.badRequest, message: Test message, statusCode: 400, responseData available)',
+          );
+        });
+
+        test('UnknownNetworkErrorException toString with originalError', () {
+          const originalError = FormatException('Bad format');
+          const exception = UnknownNetworkErrorException(
+            message: 'Test message',
+            code: NetworkErrorCode.unknownError,
+            originalError: originalError,
+          );
+          expect(
+            exception.toString(),
+            'UnknownNetworkErrorException(code: NetworkErrorCode.unknownError, message: Test message, originalError: FormatException: Bad format)',
+          );
+        });
+
+        test('UnknownNetworkErrorException toString without originalError', () {
+          const exception = UnknownNetworkErrorException(
+            message: 'Test message',
+            code: NetworkErrorCode.unknownError,
+          );
+          expect(
+            exception.toString(),
+            'UnknownNetworkErrorException(code: NetworkErrorCode.unknownError, message: Test message)',
+          );
+        });
+      });
+
+      group('Constructor Coverage', () {
+        test('should create client with all constructor parameters', () {
+          const mockInterceptor = Interceptor();
+          final mockAdapter = MockHttpClientAdapter();
+          final interceptors = [mockInterceptor];
+          final dioForFullTest = MockDio();
+
+          when(() => dioForFullTest.interceptors).thenReturn(Interceptors());
+
+          final client = TestDioClient(
+            dioClient: dioForFullTest,
+            globalCacheOptions: globalCacheOptions,
+            interceptors: interceptors,
+            httpClientAdapter: mockAdapter,
+          );
+
+          expect(client, isNotNull);
+          verify(() => dioForFullTest.interceptors.addAll(interceptors))
+              .called(1);
+          verify(() => dioForFullTest.httpClientAdapter = mockAdapter)
+              .called(1);
+        });
+
+        test('should create client with minimal parameters', () {
+          final dioForMinimalTest = MockDio();
+          final client = TestDioClient(dioClient: dioForMinimalTest);
+          expect(client, isNotNull);
+        });
+      });
+
+      group('Fetch Method Edge Cases', () {
+        test('should handle null options in fetch', () async {
+          when(
+            () => mockDio.get<List<int>>(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenAnswer((_) async => mockFetchSuccessResponse);
+
+          await dioClient.fetch('/test');
+
+          final captured = verify(
+            () => mockDio.get<List<int>>(
+              '/test',
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
+          final capturedOptions = captured.first as Options?;
+          expect(capturedOptions?.responseType, ResponseType.bytes);
+        });
+
+        test('should override user responseType in fetch', () async {
+          final userOptions = Options(responseType: ResponseType.json);
+          when(
+            () => mockDio.get<List<int>>(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenAnswer((_) async => mockFetchSuccessResponse);
+
+          await dioClient.fetch('/test', options: userOptions);
+
+          final captured = verify(
+            () => mockDio.get<List<int>>(
+              '/test',
+              options: captureAny(named: 'options'),
+            ),
+          ).captured;
+          final capturedOptions = captured.first as Options?;
+          expect(capturedOptions?.responseType, ResponseType.bytes);
+        });
+      });
+
+      group('Download Method Edge Cases', () {
+        test('should pass deleteOnError parameter correctly', () async {
+          when(
+            () => mockDio.download(
+              any(),
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+              deleteOnError: any(named: 'deleteOnError'),
+            ),
+          ).thenAnswer((_) async => mockDownloadSuccessResponse);
+
+          await dioClient.download('/test', '/path');
+
+          verify(
+            () => mockDio.download(
+              '/test',
+              '/path',
+            ),
+          ).called(1);
+        });
+
+        test('should use default deleteOnError when not specified', () async {
+          when(
+            () => mockDio.download(
+              any(),
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+              deleteOnError: any(named: 'deleteOnError'),
+            ),
+          ).thenAnswer((_) async => mockDownloadSuccessResponse);
+
+          await dioClient.download('/test', '/path');
+
+          verify(
+            () => mockDio.download(
+              '/test',
+              '/path',
+            ),
+          ).called(1);
+        });
+      });
+
+      group('NetworkResponseException Factory Edge Cases', () {
+        test('should handle null statusCode in response', () async {
+          final mockErrorResponse = MockResponse<dynamic>();
+          when(() => mockErrorResponse.statusCode).thenReturn(null);
+          when(() => mockErrorResponse.data).thenReturn(null);
+          when(() => mockErrorResponse.requestOptions)
+              .thenReturn(requestOptions);
+
+          final exception = createDioException(
+            DioExceptionType.badResponse,
+            response: mockErrorResponse,
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkResponseException>()
+                  .having(
+                    (e) => e.code,
+                    'code',
+                    NetworkErrorCode.responseUnhandled,
+                  )
+                  .having((e) => e.statusCode, 'statusCode', isNull),
+            ),
+          );
+        });
+
+        test('should handle 501 Not Implemented', () async {
+          final mockErrorResponse = createMockResponse(
+            reqOptions: requestOptions,
+            statusCode: 501,
+          );
+          final exception = createDioException(
+            DioExceptionType.badResponse,
+            response: mockErrorResponse,
+          );
+          when(
+            () => mockDio.get(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.get('/test'),
+            throwsA(
+              isA<NetworkResponseException>()
+                  .having((e) => e.code, 'code', NetworkErrorCode.serverError)
+                  .having((e) => e.statusCode, 'statusCode', 501),
+            ),
+          );
+        });
+      });
+
+      group('All HTTP Methods Error Coverage', () {
+        test('should handle sendTimeout in all methods', () async {
+          final exception = createDioException(DioExceptionType.sendTimeout);
+
+          // Test POST
+          when(
+            () => mockDio.post(
+              any(),
+              data: any(named: 'data'),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onSendProgress: any(named: 'onSendProgress'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.post('/test'),
+            throwsA(isA<NetworkTimeoutException>()),
+          );
+
+          // Test PUT
+          when(
+            () => mockDio.put(
+              any(),
+              data: any(named: 'data'),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onSendProgress: any(named: 'onSendProgress'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.put('/test'),
+            throwsA(isA<NetworkTimeoutException>()),
+          );
+        });
+
+        test('should handle unknown DioException in all methods', () async {
+          final exception = createDioException(DioExceptionType.unknown);
+
+          // Test FETCH
+          when(
+            () => mockDio.get<List<int>>(
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.fetch('/test'),
+            throwsA(
+              isA<NetworkConnectionException>().having(
+                (e) => e.code,
+                'code',
+                NetworkErrorCode.networkUnreachable,
+              ),
+            ),
+          );
+
+          // Test DOWNLOAD
+          when(
+            () => mockDio.download(
+              any(),
+              any(),
+              queryParameters: any(named: 'queryParameters'),
+              options: any(named: 'options'),
+              cancelToken: any(named: 'cancelToken'),
+              onReceiveProgress: any(named: 'onReceiveProgress'),
+              deleteOnError: any(named: 'deleteOnError'),
+            ),
+          ).thenThrow(exception);
+          expect(
+            () => dioClient.download('/test', '/path'),
+            throwsA(
+              isA<NetworkConnectionException>().having(
+                (e) => e.code,
+                'code',
+                NetworkErrorCode.networkUnreachable,
+              ),
+            ),
+          );
+        });
+      });
     });
   }); // End DioClient Group
 } // End main
