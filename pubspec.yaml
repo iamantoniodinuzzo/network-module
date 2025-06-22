@@ -3,7 +3,7 @@ description: >-
   A robust, reusable, and testable network layer package for Flutter applications. 
   Built on Dio with structured error handling, caching integration, request cancellation, 
   and comprehensive testing support.
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/iamantoniodinuzzo/network-module
 repository: https://github.com/iamantoniodinuzzo/network-module
 issue_tracker: https://github.com/iamantoniodinuzzo/network-module/issues

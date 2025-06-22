@@ -5,7 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2024-12-19
+## [1.1.0] - 2025-06-22
+
+### Added
+
+- **Git Flow Integration**: Complete Git Flow workflow with standard commands and extension support
+- **Workflow Optimization**: Removed hardcoded Flutter versions, now uses stable channel
+- **Security Enhancements**: Dedicated security scan workflow with scheduled runs
+- **Dependabot Configuration**: Automatic dependency updates for Dart, Flutter, and GitHub Actions
+- **Enhanced Documentation**: Comprehensive Git Flow guide in CONTRIBUTING.md and README.md
+- **Feature Validation**: Lightweight validation workflow for feature branches
+- **GitHub Release Integration**: Automatic GitHub Release creation with pub.dev publishing
+
+### Changed
+
+- **CI/CD Workflows**: Now run only on `main` and `develop` branches for efficiency
+- **Flutter Versions**: Removed hardcoded versions, now uses `stable` and `beta` channels
+- **Security Scanning**: Improved security audit with proper pana installation and error handling
+- **Workflow Structure**: Consolidated duplicate workflows into single, comprehensive solutions
+
+### Fixed
+
+- **Security Scan**: Fixed "No active package pana" error with proper installation
+- **Build Process**: Re-enabled build job with documentation generation
+- **Git Flow Configuration**: Added `.gitflow` configuration file for consistent setup
+
+### Security
+
+- **Automated Security Scans**: Weekly security audits with detailed reporting
+- **Dependency Monitoring**: Automated vulnerability detection with GitHub Dependency Review
+- **Outdated Dependencies**: Regular checks for outdated packages
+
+## [1.0.0]
 
 ### Added
 
